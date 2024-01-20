@@ -25,6 +25,6 @@ func NewDeliverMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *De
 
 func (l *DeliverMessageLogic) DeliverMessage(in *mooon_mailbox.DeliverMessageReq) (*mooon_mailbox.DeliverMessageResp, error) {
 	// todo: add your logic here and delete this line
-
-	return &mooon_mailbox.DeliverMessageResp{}, nil
+	return deliverMessage(l, in)
+	//return &mooon_mailbox.DeliverMessageResp{}, nil
 }
