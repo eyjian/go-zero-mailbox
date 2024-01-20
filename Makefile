@@ -2,7 +2,7 @@
 
 all: mooonmailbox_service
 
-mooonmailbox_service: mooonmailbox.go
+mooonmailbox_service: mooonmailbox.go internal/logic/deliver_message_impl.go internal/logic/list_messages_impl.go
 	go build -o $@ $<
 
 .PHONY: clean rpc sql tidy
