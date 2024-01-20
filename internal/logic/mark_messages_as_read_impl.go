@@ -9,8 +9,7 @@ import (
 	"strconv"
 )
 
-func markMessageAsRead(l *MarkMessageAsReadLogic, in *mooonmailbox.MarkAsReadReq) (*mooonmailbox.MarkAsReadResp, error) {
-	// todo: add your logic here and delete this line
+func markMessagesAsRead(l *MarkMessagesAsReadLogic, in *mooonmailbox.MarkMessagesAsReadReq) (*mooonmailbox.MarkMessagesAsReadResp, error) {
 	sql := getSql(in)
 	dbResult, err := l.svcCtx.CachedConn.ExecNoCacheCtx(l.ctx, sql)
 	if err != nil {
@@ -20,13 +19,13 @@ func markMessageAsRead(l *MarkMessageAsReadLogic, in *mooonmailbox.MarkAsReadReq
 		var rowsAffected int64 = 0
 		rowsAffected, _ = dbResult.RowsAffected()
 		logc.Infof(l.ctx, "Exec %s success: RowsAffected=%d\n", sql, rowsAffected)
-		return &mooonmailbox.MarkAsReadResp{
+		return &mooonmailbox.MarkMessagesAsReadResp{
 			Recipient: in.Recipient,
 		}, nil
 	}
 }
 
-func getSql(in *mooonmailbox.MarkAsReadReq) string {
+func getSql(in *mooonmailbox.MarkMessagesAsReadReq) string {
 	inStr := ""
 	for index, letterId := range in.LettersIdList {
 		if index == 0 {

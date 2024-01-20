@@ -32,12 +32,12 @@ func (s *MooonMailboxServer) ListMessages(ctx context.Context, in *mooon_mailbox
 	return l.ListMessages(in)
 }
 
-func (s *MooonMailboxServer) MarkMessageAsRead(ctx context.Context, in *mooon_mailbox.MarkAsReadReq) (*mooon_mailbox.MarkAsReadResp, error) {
-	l := logic.NewMarkMessageAsReadLogic(ctx, s.svcCtx)
-	return l.MarkMessageAsRead(in)
+func (s *MooonMailboxServer) MarkMessagesAsRead(ctx context.Context, in *mooon_mailbox.MarkMessagesAsReadReq) (*mooon_mailbox.MarkMessagesAsReadResp, error) {
+	l := logic.NewMarkMessagesAsReadLogic(ctx, s.svcCtx)
+	return l.MarkMessagesAsRead(in)
 }
 
-func (s *MooonMailboxServer) DeleteMessages(ctx context.Context, in *mooon_mailbox.DeleteMessageReq) (*mooon_mailbox.DeleteMessageResp, error) {
+func (s *MooonMailboxServer) DeleteMessages(ctx context.Context, in *mooon_mailbox.DeleteMessagesReq) (*mooon_mailbox.DeleteMessagesResp, error) {
 	l := logic.NewDeleteMessagesLogic(ctx, s.svcCtx)
 	return l.DeleteMessages(in)
 }

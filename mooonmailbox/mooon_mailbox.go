@@ -13,21 +13,21 @@ import (
 )
 
 type (
-	DeleteMessageReq   = mooon_mailbox.DeleteMessageReq
-	DeleteMessageResp  = mooon_mailbox.DeleteMessageResp
-	DeliverMessageReq  = mooon_mailbox.DeliverMessageReq
-	DeliverMessageResp = mooon_mailbox.DeliverMessageResp
-	Letter             = mooon_mailbox.Letter
-	ListMessagesReq    = mooon_mailbox.ListMessagesReq
-	ListMessagesResp   = mooon_mailbox.ListMessagesResp
-	MarkAsReadReq      = mooon_mailbox.MarkAsReadReq
-	MarkAsReadResp     = mooon_mailbox.MarkAsReadResp
+	DeleteMessagesReq      = mooon_mailbox.DeleteMessagesReq
+	DeleteMessagesResp     = mooon_mailbox.DeleteMessagesResp
+	DeliverMessageReq      = mooon_mailbox.DeliverMessageReq
+	DeliverMessageResp     = mooon_mailbox.DeliverMessageResp
+	Letter                 = mooon_mailbox.Letter
+	ListMessagesReq        = mooon_mailbox.ListMessagesReq
+	ListMessagesResp       = mooon_mailbox.ListMessagesResp
+	MarkMessagesAsReadReq  = mooon_mailbox.MarkMessagesAsReadReq
+	MarkMessagesAsReadResp = mooon_mailbox.MarkMessagesAsReadResp
 
 	MooonMailbox interface {
 		DeliverMessage(ctx context.Context, in *DeliverMessageReq, opts ...grpc.CallOption) (*DeliverMessageResp, error)
 		ListMessages(ctx context.Context, in *ListMessagesReq, opts ...grpc.CallOption) (*ListMessagesResp, error)
-		MarkMessageAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error)
-		DeleteMessages(ctx context.Context, in *DeleteMessageReq, opts ...grpc.CallOption) (*DeleteMessageResp, error)
+		MarkMessagesAsRead(ctx context.Context, in *MarkMessagesAsReadReq, opts ...grpc.CallOption) (*MarkMessagesAsReadResp, error)
+		DeleteMessages(ctx context.Context, in *DeleteMessagesReq, opts ...grpc.CallOption) (*DeleteMessagesResp, error)
 	}
 
 	defaultMooonMailbox struct {
@@ -51,12 +51,12 @@ func (m *defaultMooonMailbox) ListMessages(ctx context.Context, in *ListMessages
 	return client.ListMessages(ctx, in, opts...)
 }
 
-func (m *defaultMooonMailbox) MarkMessageAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error) {
+func (m *defaultMooonMailbox) MarkMessagesAsRead(ctx context.Context, in *MarkMessagesAsReadReq, opts ...grpc.CallOption) (*MarkMessagesAsReadResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
-	return client.MarkMessageAsRead(ctx, in, opts...)
+	return client.MarkMessagesAsRead(ctx, in, opts...)
 }
 
-func (m *defaultMooonMailbox) DeleteMessages(ctx context.Context, in *DeleteMessageReq, opts ...grpc.CallOption) (*DeleteMessageResp, error) {
+func (m *defaultMooonMailbox) DeleteMessages(ctx context.Context, in *DeleteMessagesReq, opts ...grpc.CallOption) (*DeleteMessagesResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
 	return client.DeleteMessages(ctx, in, opts...)
 }
