@@ -13,7 +13,7 @@ message Letter {
   string letter_body = 4; // 信件内容
 }
 
-// 投递单个消息
+// 投递单个信件
 message DeliverMessageReq {
   string recipient = 1; // 收件人
   string letter_body = 2; // 信件内容
@@ -65,8 +65,15 @@ message DeleteMessagesResp {
 
 // 信箱服务
 service MooonMailbox {
+  // 投递单个信件
   rpc deliver_message(DeliverMessageReq) returns(DeliverMessageResp);
+
+  // 批量列出信件
   rpc list_messages(ListMessagesReq) returns (ListMessagesResp);
+
+  // 批量标记为已读
   rpc mark_messages_as_read(MarkMessagesAsReadReq) returns (MarkMessagesAsReadResp);
+
+  // 批量删除信件
   rpc delete_messages(DeleteMessagesReq) returns (DeleteMessagesResp);
 }
