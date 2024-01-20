@@ -25,6 +25,6 @@ func NewMarkMessageAsReadLogic(ctx context.Context, svcCtx *svc.ServiceContext) 
 
 func (l *MarkMessageAsReadLogic) MarkMessageAsRead(in *mooon_mailbox.MarkAsReadReq) (*mooon_mailbox.MarkAsReadResp, error) {
 	// todo: add your logic here and delete this line
-
-	return &mooon_mailbox.MarkAsReadResp{}, nil
+	return markMessageAsRead(l, in)
+	//return &mooon_mailbox.MarkAsReadResp{}, nil
 }
