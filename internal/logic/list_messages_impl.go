@@ -75,7 +75,7 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 
 		// 将 letters 赋值给 messages
 		messages = mooonmailbox.ListMessagesResp{
-			Recipient:     letters[0].FRecipient, // 假设收件人都是相同的
+			Recipient:     in.Recipient,
 			Letters:       letterList,
 			NextPageStart: nextPageStart,
 		}
