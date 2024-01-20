@@ -1,6 +1,14 @@
 # Written by yijian on 2024/01/20
 
-.PHONY: rpc sql tidy
+all: mooon_mailbox_service
+
+mooon_mailbox_service: mooonmailbox.go
+	go build -o $@ $<
+
+.PHONY: clean rpc sql tidy
+
+clean:
+	rm -f mooon_mailbox_service
 
 rpc:
 	goctl rpc protoc mooon-mailbox.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=. --style go_zero
