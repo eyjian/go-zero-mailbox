@@ -22,21 +22,25 @@ func NewMooonMailboxServer(svcCtx *svc.ServiceContext) *MooonMailboxServer {
 	}
 }
 
+// 投递单个信件
 func (s *MooonMailboxServer) DeliverMessage(ctx context.Context, in *mooon_mailbox.DeliverMessageReq) (*mooon_mailbox.DeliverMessageResp, error) {
 	l := logic.NewDeliverMessageLogic(ctx, s.svcCtx)
 	return l.DeliverMessage(in)
 }
 
+// 批量列出信件
 func (s *MooonMailboxServer) ListMessages(ctx context.Context, in *mooon_mailbox.ListMessagesReq) (*mooon_mailbox.ListMessagesResp, error) {
 	l := logic.NewListMessagesLogic(ctx, s.svcCtx)
 	return l.ListMessages(in)
 }
 
+// 批量标记为已读
 func (s *MooonMailboxServer) MarkMessagesAsRead(ctx context.Context, in *mooon_mailbox.MarkMessagesAsReadReq) (*mooon_mailbox.MarkMessagesAsReadResp, error) {
 	l := logic.NewMarkMessagesAsReadLogic(ctx, s.svcCtx)
 	return l.MarkMessagesAsRead(in)
 }
 
+// 批量删除信件
 func (s *MooonMailboxServer) DeleteMessages(ctx context.Context, in *mooon_mailbox.DeleteMessagesReq) (*mooon_mailbox.DeleteMessagesResp, error) {
 	l := logic.NewDeleteMessagesLogic(ctx, s.svcCtx)
 	return l.DeleteMessages(in)

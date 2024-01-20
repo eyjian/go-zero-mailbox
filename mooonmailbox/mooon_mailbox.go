@@ -24,9 +24,13 @@ type (
 	MarkMessagesAsReadResp = mooon_mailbox.MarkMessagesAsReadResp
 
 	MooonMailbox interface {
+		// 投递单个信件
 		DeliverMessage(ctx context.Context, in *DeliverMessageReq, opts ...grpc.CallOption) (*DeliverMessageResp, error)
+		// 批量列出信件
 		ListMessages(ctx context.Context, in *ListMessagesReq, opts ...grpc.CallOption) (*ListMessagesResp, error)
+		// 批量标记为已读
 		MarkMessagesAsRead(ctx context.Context, in *MarkMessagesAsReadReq, opts ...grpc.CallOption) (*MarkMessagesAsReadResp, error)
+		// 批量删除信件
 		DeleteMessages(ctx context.Context, in *DeleteMessagesReq, opts ...grpc.CallOption) (*DeleteMessagesResp, error)
 	}
 
@@ -41,21 +45,25 @@ func NewMooonMailbox(cli zrpc.Client) MooonMailbox {
 	}
 }
 
+// 投递单个信件
 func (m *defaultMooonMailbox) DeliverMessage(ctx context.Context, in *DeliverMessageReq, opts ...grpc.CallOption) (*DeliverMessageResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
 	return client.DeliverMessage(ctx, in, opts...)
 }
 
+// 批量列出信件
 func (m *defaultMooonMailbox) ListMessages(ctx context.Context, in *ListMessagesReq, opts ...grpc.CallOption) (*ListMessagesResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
 	return client.ListMessages(ctx, in, opts...)
 }
 
+// 批量标记为已读
 func (m *defaultMooonMailbox) MarkMessagesAsRead(ctx context.Context, in *MarkMessagesAsReadReq, opts ...grpc.CallOption) (*MarkMessagesAsReadResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
 	return client.MarkMessagesAsRead(ctx, in, opts...)
 }
 
+// 批量删除信件
 func (m *defaultMooonMailbox) DeleteMessages(ctx context.Context, in *DeleteMessagesReq, opts ...grpc.CallOption) (*DeleteMessagesResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
 	return client.DeleteMessages(ctx, in, opts...)

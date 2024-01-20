@@ -31,9 +31,13 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MooonMailboxClient interface {
+	// 投递单个信件
 	DeliverMessage(ctx context.Context, in *DeliverMessageReq, opts ...grpc.CallOption) (*DeliverMessageResp, error)
+	// 批量列出信件
 	ListMessages(ctx context.Context, in *ListMessagesReq, opts ...grpc.CallOption) (*ListMessagesResp, error)
+	// 批量标记为已读
 	MarkMessagesAsRead(ctx context.Context, in *MarkMessagesAsReadReq, opts ...grpc.CallOption) (*MarkMessagesAsReadResp, error)
+	// 批量删除信件
 	DeleteMessages(ctx context.Context, in *DeleteMessagesReq, opts ...grpc.CallOption) (*DeleteMessagesResp, error)
 }
 
@@ -85,9 +89,13 @@ func (c *mooonMailboxClient) DeleteMessages(ctx context.Context, in *DeleteMessa
 // All implementations must embed UnimplementedMooonMailboxServer
 // for forward compatibility
 type MooonMailboxServer interface {
+	// 投递单个信件
 	DeliverMessage(context.Context, *DeliverMessageReq) (*DeliverMessageResp, error)
+	// 批量列出信件
 	ListMessages(context.Context, *ListMessagesReq) (*ListMessagesResp, error)
+	// 批量标记为已读
 	MarkMessagesAsRead(context.Context, *MarkMessagesAsReadReq) (*MarkMessagesAsReadResp, error)
+	// 批量删除信件
 	DeleteMessages(context.Context, *DeleteMessagesReq) (*DeleteMessagesResp, error)
 	mustEmbedUnimplementedMooonMailboxServer()
 }

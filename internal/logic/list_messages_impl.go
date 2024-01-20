@@ -7,16 +7,25 @@ import (
 	"github.com/zeromicro/go-zero/core/logc"
 	"mooon-mailbox/model"
 	mooonmailbox "mooon-mailbox/pb/mooon-mailbox"
+	"strconv"
 )
 
 func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooonmailbox.ListMessagesResp, error) {
 	var letters []model.TMooonMailbox
-	var nextPageStart int64 = 0
+	var nextPageStart string
 
-	pageStart := in.PageStart
-	if pageStart == 0 {
-		pageStart = 1000000000000
+	// StartLetterId
+	startLetterId := in.StartLetterId
+	if len(startLetterId) == 0 || startLetterId == "0" {
+		startLetterId = "1000000000000"
 	}
+	_, err := strconv.ParseInt(startLetterId, 10, 64)
+	if err != nil {
+		logc.Errorf(l.ctx, "Invalid parameter[start_letter_id]: (%s)%s", startLetterId, err.Error())
+		return nil, err
+	}
+
+	// PageSize
 	pageSize := in.PageSize
 	if pageSize > 10 {
 		pageSize = 10
@@ -36,14 +45,14 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 			"WHERE "+
 			"f_recipient='%s' AND "+
 			"f_state=%d AND "+
-			"f_id<%d "+
+			"f_id<%s "+
 			"ORDER BY f_id DESC "+
 			"LIMIT %d",
 		in.Recipient,
 		int(in.ListAction),
-		pageStart,
+		startLetterId,
 		in.PageSize)
-	err := l.svcCtx.CachedConn.QueryRowsNoCacheCtx(l.ctx, &letters, sql)
+	err = l.svcCtx.CachedConn.QueryRowsNoCacheCtx(l.ctx, &letters, sql)
 	if err != nil {
 		logc.Errorf(l.ctx, "Exec %s error: %s", sql, err.Error())
 		return nil, err
@@ -55,15 +64,13 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 		var letterList []*mooonmailbox.Letter
 		for _, letter := range letters {
 			l := &mooonmailbox.Letter{
-				LetterId:    letter.FId,
+				LetterId:    strconv.FormatInt(letter.FId, 10),
 				DeliverTime: letter.FDeliverTime.Format("2006-01-02 15:04:05"),
 				ArrivalTime: letter.FArrivalTime.Format("2006-01-02 15:04:05"),
 				LetterBody:  letter.FLetterBody,
 			}
 			letterList = append(letterList, l)
-			if l.LetterId > nextPageStart {
-				nextPageStart = l.LetterId
-			}
+			nextPageStart = strconv.FormatInt(letter.FId, 10)
 		}
 
 		// 将 letters 赋值给 messages

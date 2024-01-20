@@ -4,12 +4,17 @@ package logic
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
 	"mooon-mailbox/mooonmailbox"
 	"mooon-mailbox/pb/mooon-mailbox"
 )
 
 func deleteMessages(l *DeleteMessagesLogic, in *mooon_mailbox.DeleteMessagesReq) (*mooon_mailbox.DeleteMessagesResp, error) {
+	if len(in.LettersIdList) == 0 {
+		logc.Errorf(l.ctx, "parameter[letters_id_list] is not set, recipient is %s\n", in.Recipient)
+		return nil, errors.Errorf("parameter[letters_id_list] is not set, recipient is %s", in.Recipient)
+	}
 	sql := getDeleteSql(in)
 	dbResult, err := l.svcCtx.CachedConn.ExecNoCacheCtx(l.ctx, sql)
 	if err != nil {
