@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logc"
 	mooonmailbox "mooon-mailbox/pb/mooon-mailbox"
-	"strconv"
 )
 
 func markMessagesAsRead(l *MarkMessagesAsReadLogic, in *mooonmailbox.MarkMessagesAsReadReq) (*mooonmailbox.MarkMessagesAsReadResp, error) {
@@ -26,14 +25,7 @@ func markMessagesAsRead(l *MarkMessagesAsReadLogic, in *mooonmailbox.MarkMessage
 }
 
 func getSql(in *mooonmailbox.MarkMessagesAsReadReq) string {
-	inStr := ""
-	for index, letterId := range in.LettersIdList {
-		if index == 0 {
-			inStr = strconv.FormatInt(letterId, 10)
-		} else {
-			inStr = inStr + "," + strconv.FormatInt(letterId, 10)
-		}
-	}
+	inStr := getInStr(in.LettersIdList)
 	return fmt.Sprintf(
 		"UPDATE t_mooon_mailbox SET f_state=%d WHERE f_recipient='%s' AND f_id IN (%s)",
 		mooonmailbox.ListMessagesReq_LA_ONLY_READ,
