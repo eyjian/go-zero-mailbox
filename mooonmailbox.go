@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"mooon-mailbox/model"
 	"os"
@@ -46,6 +47,7 @@ func main() {
 
 	dbConn := sqlx.NewMysql(*dsn)
 	ctx.MailboxModel = model.NewTMooonMailboxModel(dbConn, c.CacheConf)
+	ctx.CachedConn = sqlc.NewConn(dbConn, c.CacheConf)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		mooon_mailbox.RegisterMooonMailboxServer(grpcServer, server.NewMooonMailboxServer(ctx))
