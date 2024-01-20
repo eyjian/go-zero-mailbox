@@ -10,7 +10,8 @@ import (
 	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
-	//"github.com/zeromicro/go-zero/core/stores/sqlc"
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/core/stringx"
 )
@@ -20,6 +21,8 @@ var (
 	tMooonMailboxRows                = strings.Join(tMooonMailboxFieldNames, ",")
 	tMooonMailboxRowsExpectAutoSet   = strings.Join(stringx.Remove(tMooonMailboxFieldNames, "`f_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	tMooonMailboxRowsWithPlaceHolder = strings.Join(stringx.Remove(tMooonMailboxFieldNames, "`f_id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
+
+	cacheTMooonMailboxFIdPrefix = "cache:tMooonMailbox:fId:"
 )
 
 type (
@@ -31,7 +34,7 @@ type (
 	}
 
 	defaultTMooonMailboxModel struct {
-		conn  sqlx.SqlConn
+		sqlc.CachedConn
 		table string
 	}
 
@@ -45,27 +48,33 @@ type (
 	}
 )
 
-func newTMooonMailboxModel(conn sqlx.SqlConn) *defaultTMooonMailboxModel {
+func newTMooonMailboxModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultTMooonMailboxModel {
 	return &defaultTMooonMailboxModel{
-		conn:  conn,
-		table: "`t_mooon_mailbox`",
+		CachedConn: sqlc.NewConn(conn, c, opts...),
+		table:      "`t_mooon_mailbox`",
 	}
 }
 
 func (m *defaultTMooonMailboxModel) Delete(ctx context.Context, fId int64) error {
-	query := fmt.Sprintf("delete from %s where `f_id` = ?", m.table)
-	_, err := m.conn.ExecCtx(ctx, query, fId)
+	tMooonMailboxFIdKey := fmt.Sprintf("%s%v", cacheTMooonMailboxFIdPrefix, fId)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("delete from %s where `f_id` = ?", m.table)
+		return conn.ExecCtx(ctx, query, fId)
+	}, tMooonMailboxFIdKey)
 	return err
 }
 
 func (m *defaultTMooonMailboxModel) FindOne(ctx context.Context, fId int64) (*TMooonMailbox, error) {
-	query := fmt.Sprintf("select %s from %s where `f_id` = ? limit 1", tMooonMailboxRows, m.table)
+	tMooonMailboxFIdKey := fmt.Sprintf("%s%v", cacheTMooonMailboxFIdPrefix, fId)
 	var resp TMooonMailbox
-	err := m.conn.QueryRowCtx(ctx, &resp, query, fId)
+	err := m.QueryRowCtx(ctx, &resp, tMooonMailboxFIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+		query := fmt.Sprintf("select %s from %s where `f_id` = ? limit 1", tMooonMailboxRows, m.table)
+		return conn.QueryRowCtx(ctx, v, query, fId)
+	})
 	switch err {
 	case nil:
 		return &resp, nil
-	case sqlx.ErrNotFound:
+	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:
 		return nil, err
@@ -73,15 +82,30 @@ func (m *defaultTMooonMailboxModel) FindOne(ctx context.Context, fId int64) (*TM
 }
 
 func (m *defaultTMooonMailboxModel) Insert(ctx context.Context, data *TMooonMailbox) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, tMooonMailboxRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.FRecipient, data.FDeliverTime, data.FArrivalTime, data.FState, data.FLetterBody)
+	tMooonMailboxFIdKey := fmt.Sprintf("%s%v", cacheTMooonMailboxFIdPrefix, data.FId)
+	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, tMooonMailboxRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.FRecipient, data.FDeliverTime, data.FArrivalTime, data.FState, data.FLetterBody)
+	}, tMooonMailboxFIdKey)
 	return ret, err
 }
 
 func (m *defaultTMooonMailboxModel) Update(ctx context.Context, data *TMooonMailbox) error {
-	query := fmt.Sprintf("update %s set %s where `f_id` = ?", m.table, tMooonMailboxRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.FRecipient, data.FDeliverTime, data.FArrivalTime, data.FState, data.FLetterBody, data.FId)
+	tMooonMailboxFIdKey := fmt.Sprintf("%s%v", cacheTMooonMailboxFIdPrefix, data.FId)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `f_id` = ?", m.table, tMooonMailboxRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, data.FRecipient, data.FDeliverTime, data.FArrivalTime, data.FState, data.FLetterBody, data.FId)
+	}, tMooonMailboxFIdKey)
 	return err
+}
+
+func (m *defaultTMooonMailboxModel) formatPrimary(primary any) string {
+	return fmt.Sprintf("%s%v", cacheTMooonMailboxFIdPrefix, primary)
+}
+
+func (m *defaultTMooonMailboxModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
+	query := fmt.Sprintf("select %s from %s where `f_id` = ? limit 1", tMooonMailboxRows, m.table)
+	return conn.QueryRowCtx(ctx, v, query, primary)
 }
 
 func (m *defaultTMooonMailboxModel) tableName() string {

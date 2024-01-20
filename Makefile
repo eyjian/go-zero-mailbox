@@ -14,7 +14,7 @@ rpc:
 	goctl rpc protoc mooon-mailbox.proto --go_out=./pb --go-grpc_out=./pb --zrpc_out=. --style go_zero
 
 sql:
-	goctl model mysql ddl --src mooon-mailbox.sql --dir ./model --style go_zero
+	goctl model mysql ddl --src mooon-mailbox.sql --dir ./model -c --style go_zero
 
 tidy:
 	go mod tidy
