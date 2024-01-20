@@ -1,8 +1,10 @@
+// Written by yijian on 2024/01/20
 package main
 
 import (
 	"flag"
 	"fmt"
+	"os"
 
 	"mooon-mailbox/internal/config"
 	"mooon-mailbox/internal/server"
@@ -16,10 +18,22 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/mooonmailbox.yaml", "the config file")
+var (
+	help       = flag.Bool("h", false, "Display a help message and exit")
+	configFile = flag.String("f", "etc/mooonmailbox.yaml", "Config file")
+	dsn        = flag.String("dsn", "", "MySQL data source name")
+)
 
 func main() {
 	flag.Parse()
+	if *help {
+		usage()
+		os.Exit(1)
+	}
+	if !checkParams() {
+		usage()
+		os.Exit(1)
+	}
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
@@ -34,6 +48,30 @@ func main() {
 	})
 	defer s.Stop()
 
-	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
+	fmt.Printf("Starting mailbox server at %s...\n", c.ListenOn)
 	s.Start()
+}
+
+func usage() {
+	flag.Usage()
+}
+
+func checkParams() bool {
+	for {
+		// configFile
+		if *configFile == "" {
+			fmt.Println("Parameter[-f] is not set")
+			break
+		}
+
+		// dsn
+		if *dsn == "" {
+			fmt.Println("Parameter[-dsn] is not set")
+			break
+		}
+
+		return true
+	}
+
+	return false
 }
