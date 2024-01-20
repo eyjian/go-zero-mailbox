@@ -68,6 +68,7 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 				DeliverTime: letter.FDeliverTime.Format("2006-01-02 15:04:05"),
 				ArrivalTime: letter.FArrivalTime.Format("2006-01-02 15:04:05"),
 				LetterBody:  letter.FLetterBody,
+				LetterState: mooonmailbox.Letter_LetterState(letter.FState),
 			}
 			letterList = append(letterList, l)
 			nextPageStart = strconv.FormatInt(letter.FId, 10)

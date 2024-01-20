@@ -10,13 +10,12 @@ import (
 )
 
 func deliverMessage(l *DeliverMessageLogic, in *mooonmailbox.DeliverMessageReq) (*mooonmailbox.DeliverMessageResp, error) {
-	// todo: add your logic here and delete this line
 	now := time.Now()
 	letter := model.TMooonMailbox{
 		FRecipient:   in.Recipient,
 		FDeliverTime: now,
 		FArrivalTime: now,
-		FState:       int64(mooonmailbox.ListMessagesReq_LA_ONLY_UNREAD),
+		FState:       int64(mooonmailbox.Letter_LETTER_UNREAD),
 		FLetterBody:  in.LetterBody,
 	}
 	dbResult, err := l.svcCtx.MailboxModel.Insert(l.ctx, &letter)

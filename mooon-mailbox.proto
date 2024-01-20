@@ -7,10 +7,17 @@ option go_package = "./mooon-mailbox";
 
 // 信件
 message Letter {
+  // 信件状态
+  enum LetterState {
+    LETTER_UNREAD = 0; // 未读信件
+    LETTER_READ = 1; // 已读信件
+  }
+
   string letter_id = 1; // 信件 ID
   string deliver_time = 2; // 投递时间
   string arrival_time = 3; // 到达时间
   string letter_body = 4; // 信件内容
+  LetterState letter_state = 5; // 信件状态
 }
 
 // 投递单个信件
@@ -25,6 +32,7 @@ message DeliverMessageResp {
 
 // 批量列出信件
 message ListMessagesReq {
+  // 批量列出信件动作
   enum ListAction {
     LA_ALL = 0; // 所有信件
     LA_ONLY_UNREAD = 1; // 仅未读信件

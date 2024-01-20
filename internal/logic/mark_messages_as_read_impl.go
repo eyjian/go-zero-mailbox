@@ -33,8 +33,7 @@ func getMarkSql(in *mooonmailbox.MarkMessagesAsReadReq) string {
 	inStr := getInStr(in.LettersIdList)
 	return fmt.Sprintf(
 		"UPDATE t_mooon_mailbox SET f_state=%d WHERE f_recipient='%s' AND f_id IN (%s)",
-		mooonmailbox.ListMessagesReq_LA_ONLY_READ,
+		int(mooonmailbox.Letter_LETTER_READ),
 		in.Recipient,
 		inStr)
-
 }
