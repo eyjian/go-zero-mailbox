@@ -87,7 +87,9 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 func getState(listAction mooonmailbox.ListMessagesReq_ListAction) string {
 	if listAction == mooonmailbox.ListMessagesReq_LA_ALL {
 		return ""
+	} else if listAction == mooonmailbox.ListMessagesReq_LA_ONLY_UNREAD {
+		return fmt.Sprintf("f_state=%d AND ", int(mooonmailbox.Letter_LETTER_UNREAD))
 	} else {
-		return fmt.Sprintf("f_state=%d AND ", int(listAction))
+		return fmt.Sprintf("f_state=%d AND ", int(mooonmailbox.Letter_LETTER_READ))
 	}
 }
