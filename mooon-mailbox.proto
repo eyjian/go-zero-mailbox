@@ -28,6 +28,7 @@ message DeliverMessageReq {
 
 message DeliverMessageResp {
   string recipient = 1; // 收件人
+  string letter_id = 2; // 信件 ID
 }
 
 // 批量列出信件

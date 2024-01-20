@@ -6,6 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logc"
 	"mooon-mailbox/model"
 	mooonmailbox "mooon-mailbox/pb/mooon-mailbox"
+	"strconv"
 	"time"
 )
 
@@ -30,6 +31,7 @@ func deliverMessage(l *DeliverMessageLogic, in *mooonmailbox.DeliverMessageReq) 
 		logc.Infof(l.ctx, "Insert %s success: RowsAffected=%d, LastInsertId=%d\n", in.String(), rowsAffected, lastInsertId)
 		return &mooonmailbox.DeliverMessageResp{
 			Recipient: in.Recipient,
+			LetterId:  strconv.FormatInt(lastInsertId, 10),
 		}, nil
 	}
 }

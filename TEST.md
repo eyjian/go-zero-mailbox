@@ -1,8 +1,16 @@
-* **递送信件:**
+* **查表：**
+
+```sql
+SELECT f_id,f_recipient,f_deliver_time,f_arrival_time,f_state,f_letter_body FROM t_mooon_mailbox WHERE f_recipient='mooon' AND f_state=0 LIMIT 10;
+```
+
+* **递送信件：**
 
 ```
-grpcurl --plaintext 127.0.0.1:2024 list
-grpcurl -plaintext -d '{"recipient": "mooon", "letter_body": "hello mooon"}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/deliver_message
+# grpcurl --plaintext 127.0.0.1:2024 list
+for ((i=0; i<100; ++i)) do \
+	grpcurl -plaintext -d "{\"recipient\": \"mooon\", \"letter_body\": \"hello mooon-$i\"}" 127.0.0.1:2024 mooon_mailbox.MooonMailbox/deliver_message; \
+done
 ```
 
 * **检索信件：**
