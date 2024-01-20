@@ -8,8 +8,8 @@ option go_package = "./mooon-mailbox";
 // 信件
 message Letter {
   int64 letter_id = 1; // 信件 ID
-  int64 deliver_time = 2; // 投递时间
-  int64 arrival_time = 3; // 到达时间
+  string deliver_time = 2; // 投递时间
+  string arrival_time = 3; // 到达时间
   string letter_body = 4; // 信件内容
 }
 

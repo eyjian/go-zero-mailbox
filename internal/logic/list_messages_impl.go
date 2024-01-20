@@ -54,8 +54,8 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 		for _, letter := range letters {
 			l := &mooonmailbox.Letter{
 				LetterId:    letter.FId,
-				DeliverTime: letter.FDeliverTime.Unix(),
-				ArrivalTime: letter.FArrivalTime.Unix(),
+				DeliverTime: letter.FDeliverTime.Format("2006-01-02 15:04:05"),
+				ArrivalTime: letter.FArrivalTime.Format("2006-01-02 15:04:05"),
 				LetterBody:  letter.FLetterBody,
 			}
 			letterList = append(letterList, l)
