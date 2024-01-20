@@ -10,3 +10,10 @@ Etcd:
   - 127.0.0.1:2379
   Key: mooonmailbox.rpc
 
+CacheConf:
+  - Host: 127.0.0.1
+    Port: 6379
+    Password: ""
+    Database: 0
+    Expire: 3600
+    Weight: 100
