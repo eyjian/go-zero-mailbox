@@ -26,7 +26,7 @@ var (
 
 	// 格式：
 	// "dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local"
-	dsn = flag.String("dsn", "", "MySQL data source name")
+	dsn = flag.String("dsn", "", "MySQL data source name, example: --dsn='dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local'")
 )
 
 func main() {
