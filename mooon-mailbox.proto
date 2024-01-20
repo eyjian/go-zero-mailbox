@@ -40,6 +40,7 @@ message ListMessagesReq {
 message ListMessagesResp {
   string recipient = 1; // 收件人ListAction
   repeated Letter letters = 2; // 信件列表
+  uint32  next_page_start = 3; // 下一页
 }
 
 // 标记为已读
