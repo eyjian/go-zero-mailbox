@@ -9,22 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DeleteLetterLogic struct {
+type DeleteMessagesLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewDeleteLetterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteLetterLogic {
-	return &DeleteLetterLogic{
+func NewDeleteMessagesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteMessagesLogic {
+	return &DeleteMessagesLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *DeleteLetterLogic) DeleteLetter(in *mooon_mailbox.DeleteLetterReq) (*mooon_mailbox.DeleteLetterResp, error) {
+func (l *DeleteMessagesLogic) DeleteMessages(in *mooon_mailbox.DeleteMessageReq) (*mooon_mailbox.DeleteMessageResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &mooon_mailbox.DeleteLetterResp{}, nil
+	return &mooon_mailbox.DeleteMessageResp{}, nil
 }

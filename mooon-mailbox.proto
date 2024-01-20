@@ -46,7 +46,7 @@ message ListMessagesResp {
 // 标记为已读
 message MarkAsReadReq {
   string recipient = 1; // 收件人
-  repeated int64 letters_id_list = 2; // 信件 ID
+  repeated int64 letters_id_list = 2; // 信件 ID 列表
 }
 
 message MarkAsReadResp {
@@ -54,12 +54,12 @@ message MarkAsReadResp {
 }
 
 // 删除信件
-message DeleteLetterReq {
+message DeleteMessageReq {
   string recipient = 1; // 收件人
-  repeated string letter_id_list = 2; // 信件 ID
+  repeated string letters_id_list = 2; // 信件 ID 列表
 }
 
-message DeleteLetterResp {
+message DeleteMessageResp {
   string recipient = 1; // 收件人
 }
 
@@ -67,6 +67,6 @@ message DeleteLetterResp {
 service MooonMailbox {
   rpc deliver_message(DeliverMessageReq) returns(DeliverMessageResp);
   rpc list_messages(ListMessagesReq) returns (ListMessagesResp);
-  rpc mark_as_read(MarkAsReadReq) returns (MarkAsReadResp);
-  rpc delete_letter(DeleteLetterReq) returns (DeleteLetterResp);
+  rpc mark_message_as_read(MarkAsReadReq) returns (MarkAsReadResp);
+  rpc delete_messages(DeleteMessageReq) returns (DeleteMessageResp);
 }

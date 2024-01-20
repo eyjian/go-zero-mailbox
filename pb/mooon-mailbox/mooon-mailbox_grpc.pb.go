@@ -21,10 +21,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MooonMailbox_DeliverMessage_FullMethodName = "/mooon_mailbox.MooonMailbox/deliver_message"
-	MooonMailbox_ListMessages_FullMethodName   = "/mooon_mailbox.MooonMailbox/list_messages"
-	MooonMailbox_MarkAsRead_FullMethodName     = "/mooon_mailbox.MooonMailbox/mark_as_read"
-	MooonMailbox_DeleteLetter_FullMethodName   = "/mooon_mailbox.MooonMailbox/delete_letter"
+	MooonMailbox_DeliverMessage_FullMethodName    = "/mooon_mailbox.MooonMailbox/deliver_message"
+	MooonMailbox_ListMessages_FullMethodName      = "/mooon_mailbox.MooonMailbox/list_messages"
+	MooonMailbox_MarkMessageAsRead_FullMethodName = "/mooon_mailbox.MooonMailbox/mark_message_as_read"
+	MooonMailbox_DeleteMessages_FullMethodName    = "/mooon_mailbox.MooonMailbox/delete_messages"
 )
 
 // MooonMailboxClient is the client API for MooonMailbox service.
@@ -33,8 +33,8 @@ const (
 type MooonMailboxClient interface {
 	DeliverMessage(ctx context.Context, in *DeliverMessageReq, opts ...grpc.CallOption) (*DeliverMessageResp, error)
 	ListMessages(ctx context.Context, in *ListMessagesReq, opts ...grpc.CallOption) (*ListMessagesResp, error)
-	MarkAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error)
-	DeleteLetter(ctx context.Context, in *DeleteLetterReq, opts ...grpc.CallOption) (*DeleteLetterResp, error)
+	MarkMessageAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error)
+	DeleteMessages(ctx context.Context, in *DeleteMessageReq, opts ...grpc.CallOption) (*DeleteMessageResp, error)
 }
 
 type mooonMailboxClient struct {
@@ -63,18 +63,18 @@ func (c *mooonMailboxClient) ListMessages(ctx context.Context, in *ListMessagesR
 	return out, nil
 }
 
-func (c *mooonMailboxClient) MarkAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error) {
+func (c *mooonMailboxClient) MarkMessageAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error) {
 	out := new(MarkAsReadResp)
-	err := c.cc.Invoke(ctx, MooonMailbox_MarkAsRead_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, MooonMailbox_MarkMessageAsRead_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *mooonMailboxClient) DeleteLetter(ctx context.Context, in *DeleteLetterReq, opts ...grpc.CallOption) (*DeleteLetterResp, error) {
-	out := new(DeleteLetterResp)
-	err := c.cc.Invoke(ctx, MooonMailbox_DeleteLetter_FullMethodName, in, out, opts...)
+func (c *mooonMailboxClient) DeleteMessages(ctx context.Context, in *DeleteMessageReq, opts ...grpc.CallOption) (*DeleteMessageResp, error) {
+	out := new(DeleteMessageResp)
+	err := c.cc.Invoke(ctx, MooonMailbox_DeleteMessages_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +87,8 @@ func (c *mooonMailboxClient) DeleteLetter(ctx context.Context, in *DeleteLetterR
 type MooonMailboxServer interface {
 	DeliverMessage(context.Context, *DeliverMessageReq) (*DeliverMessageResp, error)
 	ListMessages(context.Context, *ListMessagesReq) (*ListMessagesResp, error)
-	MarkAsRead(context.Context, *MarkAsReadReq) (*MarkAsReadResp, error)
-	DeleteLetter(context.Context, *DeleteLetterReq) (*DeleteLetterResp, error)
+	MarkMessageAsRead(context.Context, *MarkAsReadReq) (*MarkAsReadResp, error)
+	DeleteMessages(context.Context, *DeleteMessageReq) (*DeleteMessageResp, error)
 	mustEmbedUnimplementedMooonMailboxServer()
 }
 
@@ -102,11 +102,11 @@ func (UnimplementedMooonMailboxServer) DeliverMessage(context.Context, *DeliverM
 func (UnimplementedMooonMailboxServer) ListMessages(context.Context, *ListMessagesReq) (*ListMessagesResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMessages not implemented")
 }
-func (UnimplementedMooonMailboxServer) MarkAsRead(context.Context, *MarkAsReadReq) (*MarkAsReadResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MarkAsRead not implemented")
+func (UnimplementedMooonMailboxServer) MarkMessageAsRead(context.Context, *MarkAsReadReq) (*MarkAsReadResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MarkMessageAsRead not implemented")
 }
-func (UnimplementedMooonMailboxServer) DeleteLetter(context.Context, *DeleteLetterReq) (*DeleteLetterResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteLetter not implemented")
+func (UnimplementedMooonMailboxServer) DeleteMessages(context.Context, *DeleteMessageReq) (*DeleteMessageResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteMessages not implemented")
 }
 func (UnimplementedMooonMailboxServer) mustEmbedUnimplementedMooonMailboxServer() {}
 
@@ -157,38 +157,38 @@ func _MooonMailbox_ListMessages_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MooonMailbox_MarkAsRead_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _MooonMailbox_MarkMessageAsRead_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MarkAsReadReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MooonMailboxServer).MarkAsRead(ctx, in)
+		return srv.(MooonMailboxServer).MarkMessageAsRead(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MooonMailbox_MarkAsRead_FullMethodName,
+		FullMethod: MooonMailbox_MarkMessageAsRead_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MooonMailboxServer).MarkAsRead(ctx, req.(*MarkAsReadReq))
+		return srv.(MooonMailboxServer).MarkMessageAsRead(ctx, req.(*MarkAsReadReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MooonMailbox_DeleteLetter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteLetterReq)
+func _MooonMailbox_DeleteMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteMessageReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MooonMailboxServer).DeleteLetter(ctx, in)
+		return srv.(MooonMailboxServer).DeleteMessages(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MooonMailbox_DeleteLetter_FullMethodName,
+		FullMethod: MooonMailbox_DeleteMessages_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MooonMailboxServer).DeleteLetter(ctx, req.(*DeleteLetterReq))
+		return srv.(MooonMailboxServer).DeleteMessages(ctx, req.(*DeleteMessageReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -209,12 +209,12 @@ var MooonMailbox_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MooonMailbox_ListMessages_Handler,
 		},
 		{
-			MethodName: "mark_as_read",
-			Handler:    _MooonMailbox_MarkAsRead_Handler,
+			MethodName: "mark_message_as_read",
+			Handler:    _MooonMailbox_MarkMessageAsRead_Handler,
 		},
 		{
-			MethodName: "delete_letter",
-			Handler:    _MooonMailbox_DeleteLetter_Handler,
+			MethodName: "delete_messages",
+			Handler:    _MooonMailbox_DeleteMessages_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

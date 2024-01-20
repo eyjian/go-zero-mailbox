@@ -13,8 +13,8 @@ import (
 )
 
 type (
-	DeleteLetterReq    = mooon_mailbox.DeleteLetterReq
-	DeleteLetterResp   = mooon_mailbox.DeleteLetterResp
+	DeleteMessageReq   = mooon_mailbox.DeleteMessageReq
+	DeleteMessageResp  = mooon_mailbox.DeleteMessageResp
 	DeliverMessageReq  = mooon_mailbox.DeliverMessageReq
 	DeliverMessageResp = mooon_mailbox.DeliverMessageResp
 	Letter             = mooon_mailbox.Letter
@@ -26,8 +26,8 @@ type (
 	MooonMailbox interface {
 		DeliverMessage(ctx context.Context, in *DeliverMessageReq, opts ...grpc.CallOption) (*DeliverMessageResp, error)
 		ListMessages(ctx context.Context, in *ListMessagesReq, opts ...grpc.CallOption) (*ListMessagesResp, error)
-		MarkAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error)
-		DeleteLetter(ctx context.Context, in *DeleteLetterReq, opts ...grpc.CallOption) (*DeleteLetterResp, error)
+		MarkMessageAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error)
+		DeleteMessages(ctx context.Context, in *DeleteMessageReq, opts ...grpc.CallOption) (*DeleteMessageResp, error)
 	}
 
 	defaultMooonMailbox struct {
@@ -51,12 +51,12 @@ func (m *defaultMooonMailbox) ListMessages(ctx context.Context, in *ListMessages
 	return client.ListMessages(ctx, in, opts...)
 }
 
-func (m *defaultMooonMailbox) MarkAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error) {
+func (m *defaultMooonMailbox) MarkMessageAsRead(ctx context.Context, in *MarkAsReadReq, opts ...grpc.CallOption) (*MarkAsReadResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
-	return client.MarkAsRead(ctx, in, opts...)
+	return client.MarkMessageAsRead(ctx, in, opts...)
 }
 
-func (m *defaultMooonMailbox) DeleteLetter(ctx context.Context, in *DeleteLetterReq, opts ...grpc.CallOption) (*DeleteLetterResp, error) {
+func (m *defaultMooonMailbox) DeleteMessages(ctx context.Context, in *DeleteMessageReq, opts ...grpc.CallOption) (*DeleteMessageResp, error) {
 	client := mooon_mailbox.NewMooonMailboxClient(m.cli.Conn())
-	return client.DeleteLetter(ctx, in, opts...)
+	return client.DeleteMessages(ctx, in, opts...)
 }
