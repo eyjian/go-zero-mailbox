@@ -44,12 +44,12 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 			"FROM t_mooon_mailbox "+
 			"WHERE "+
 			"f_recipient='%s' AND "+
-			"f_state=%d AND "+
+			"%s"+
 			"f_id<%s "+
 			"ORDER BY f_id DESC "+
 			"LIMIT %d",
 		in.Recipient,
-		int(in.ListAction),
+		getState(in.ListAction),
 		startLetterId,
 		in.PageSize)
 	err = l.svcCtx.CachedConn.QueryRowsNoCacheCtx(l.ctx, &letters, sql)
@@ -80,5 +80,13 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 			NextPageStart: nextPageStart,
 		}
 		return &messages, nil
+	}
+}
+
+func getState(listAction mooonmailbox.ListMessagesReq_ListAction) string {
+	if listAction == mooonmailbox.ListMessagesReq_LA_ALL {
+		return ""
+	} else {
+		return fmt.Sprintf("f_state=%d AND ", int(listAction))
 	}
 }
