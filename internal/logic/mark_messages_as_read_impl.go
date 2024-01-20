@@ -13,7 +13,7 @@ func markMessagesAsRead(l *MarkMessagesAsReadLogic, in *mooonmailbox.MarkMessage
 	sql := getSql(in)
 	dbResult, err := l.svcCtx.CachedConn.ExecNoCacheCtx(l.ctx, sql)
 	if err != nil {
-		logc.Errorf(l.ctx, "Insert %s to table error: %s\n", in.String(), err.Error())
+		logc.Errorf(l.ctx, "Exec %s error: %s\n", sql, err.Error())
 		return nil, err
 	} else {
 		var rowsAffected int64 = 0
