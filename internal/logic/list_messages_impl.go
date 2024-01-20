@@ -49,8 +49,8 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 			"ORDER BY f_id DESC "+
 			"LIMIT %d",
 		in.Recipient,
-		getState(in.ListAction),
 		startLetterId,
+		getState(in.ListAction),
 		in.PageSize)
 	err = l.svcCtx.CachedConn.QueryRowsNoCacheCtx(l.ctx, &letters, sql)
 	if err != nil {
