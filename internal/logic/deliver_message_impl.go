@@ -5,18 +5,18 @@ package logic
 import (
 	"github.com/zeromicro/go-zero/core/logc"
 	"mooon-mailbox/model"
-	mooonmailbox "mooon-mailbox/pb/mooon-mailbox"
+	"mooon-mailbox/pb/mooon_mailbox"
 	"strconv"
 	"time"
 )
 
-func deliverMessage(l *DeliverMessageLogic, in *mooonmailbox.DeliverMessageReq) (*mooonmailbox.DeliverMessageResp, error) {
+func deliverMessage(l *DeliverMessageLogic, in *mooon_mailbox.DeliverMessageReq) (*mooon_mailbox.DeliverMessageResp, error) {
 	now := time.Now()
 	letter := model.TMooonMailbox{
 		FRecipient:   in.Recipient,
 		FDeliverTime: now,
 		FArrivalTime: now,
-		FState:       int64(mooonmailbox.Letter_LETTER_UNREAD),
+		FState:       int64(mooon_mailbox.Letter_LETTER_UNREAD),
 		FLetterBody:  in.LetterBody,
 	}
 	dbResult, err := l.svcCtx.MailboxModel.Insert(l.ctx, &letter)
@@ -29,7 +29,7 @@ func deliverMessage(l *DeliverMessageLogic, in *mooonmailbox.DeliverMessageReq) 
 		rowsAffected, _ = dbResult.RowsAffected()
 		lastInsertId, _ = dbResult.LastInsertId()
 		logc.Infof(l.ctx, "Insert %s success: RowsAffected=%d, LastInsertId=%d\n", in.String(), rowsAffected, lastInsertId)
-		return &mooonmailbox.DeliverMessageResp{
+		return &mooon_mailbox.DeliverMessageResp{
 			Recipient: in.Recipient,
 			LetterId:  strconv.FormatInt(lastInsertId, 10),
 		}, nil

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"mooon-mailbox/internal/svc"
-	"mooon-mailbox/pb/mooon-mailbox"
+	"mooon-mailbox/pb/mooon_mailbox"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

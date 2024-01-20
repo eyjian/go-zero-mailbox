@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logc"
 	"mooon-mailbox/model"
-	mooonmailbox "mooon-mailbox/pb/mooon-mailbox"
+	"mooon-mailbox/pb/mooon_mailbox"
 	"strconv"
 )
 
-func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooonmailbox.ListMessagesResp, error) {
+func listMessages(l *ListMessagesLogic, in *mooon_mailbox.ListMessagesReq) (*mooon_mailbox.ListMessagesResp, error) {
 	var letters []model.TMooonMailbox
 	var nextPageStart string
 
@@ -57,25 +57,25 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 		logc.Errorf(l.ctx, "Exec %s error: %s", sql, err.Error())
 		return nil, err
 	} else {
-		var messages mooonmailbox.ListMessagesResp
+		var messages mooon_mailbox.ListMessagesResp
 		logc.Infof(l.ctx, "Exec %s success\n", sql)
 
 		// 将 letters 转换为 Letter 类型的切片
-		var letterList []*mooonmailbox.Letter
+		var letterList []*mooon_mailbox.Letter
 		for _, letter := range letters {
-			l := &mooonmailbox.Letter{
+			l := &mooon_mailbox.Letter{
 				LetterId:    strconv.FormatInt(letter.FId, 10),
 				DeliverTime: letter.FDeliverTime.Format("2006-01-02 15:04:05"),
 				ArrivalTime: letter.FArrivalTime.Format("2006-01-02 15:04:05"),
 				LetterBody:  letter.FLetterBody,
-				LetterState: mooonmailbox.Letter_LetterState(letter.FState),
+				LetterState: mooon_mailbox.Letter_LetterState(letter.FState),
 			}
 			letterList = append(letterList, l)
 			nextPageStart = strconv.FormatInt(letter.FId, 10)
 		}
 
 		// 将 letters 赋值给 messages
-		messages = mooonmailbox.ListMessagesResp{
+		messages = mooon_mailbox.ListMessagesResp{
 			Recipient:     in.Recipient,
 			Letters:       letterList,
 			NextPageStart: nextPageStart,
@@ -84,12 +84,12 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 	}
 }
 
-func getState(listAction mooonmailbox.ListMessagesReq_ListAction) string {
-	if listAction == mooonmailbox.ListMessagesReq_LA_ALL {
+func getState(listAction mooon_mailbox.ListMessagesReq_ListAction) string {
+	if listAction == mooon_mailbox.ListMessagesReq_LA_ALL {
 		return ""
-	} else if listAction == mooonmailbox.ListMessagesReq_LA_ONLY_UNREAD {
-		return fmt.Sprintf("f_state=%d AND ", int(mooonmailbox.Letter_LETTER_UNREAD))
+	} else if listAction == mooon_mailbox.ListMessagesReq_LA_ONLY_UNREAD {
+		return fmt.Sprintf("f_state=%d AND ", int(mooon_mailbox.Letter_LETTER_UNREAD))
 	} else {
-		return fmt.Sprintf("f_state=%d AND ", int(mooonmailbox.Letter_LETTER_READ))
+		return fmt.Sprintf("f_state=%d AND ", int(mooon_mailbox.Letter_LETTER_READ))
 	}
 }

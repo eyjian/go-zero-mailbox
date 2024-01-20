@@ -3,7 +3,7 @@ syntax = "proto3";
 package mooon_mailbox;
 
 // 当 protoc-gen-go 版本大于 1.4.0 时需加上 go_package，否则编译报错“unable to determine Go import path for”
-option go_package = "./mooon-mailbox";
+option go_package = "./mooon_mailbox";
 
 // 信件
 message Letter {

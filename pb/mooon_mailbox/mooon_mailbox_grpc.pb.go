@@ -4,7 +4,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.19.4
-// source: mooon-mailbox.proto
+// source: mooon_mailbox.proto
 
 package mooon_mailbox
 
@@ -226,5 +226,5 @@ var MooonMailbox_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "mooon-mailbox.proto",
+	Metadata: "mooon_mailbox.proto",
 }

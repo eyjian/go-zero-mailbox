@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
 	"mooon-mailbox/mooonmailbox"
-	"mooon-mailbox/pb/mooon-mailbox"
+	"mooon-mailbox/pb/mooon_mailbox"
 )
 
 func deleteMessages(l *DeleteMessagesLogic, in *mooon_mailbox.DeleteMessagesReq) (*mooon_mailbox.DeleteMessagesResp, error) {
@@ -24,7 +24,7 @@ func deleteMessages(l *DeleteMessagesLogic, in *mooon_mailbox.DeleteMessagesReq)
 		var rowsAffected int64 = 0
 		rowsAffected, _ = dbResult.RowsAffected()
 		logc.Infof(l.ctx, "Exec %s success: RowsAffected=%d\n", sql, rowsAffected)
-		return &mooonmailbox.DeleteMessagesResp{
+		return &mooon_mailbox.DeleteMessagesResp{
 			Recipient: in.Recipient,
 		}, nil
 	}
