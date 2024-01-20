@@ -24,19 +24,20 @@ done
       "letterId": "3",
       "deliverTime": "1705734339",
       "arrivalTime": "1705734339",
-      "letterBody": "hello mooon world"
+      "letterBody": "hello mooon-03"
     },
     {
       "letterId": "2",
       "deliverTime": "1705730808",
       "arrivalTime": "1705730808",
-      "letterBody": "hello mooon world"
+      "letterBody": "hello mooon-02"
     },
     {
       "letterId": "1",
       "deliverTime": "1705730776",
       "arrivalTime": "1705730776",
-      "letterBody": "hello mooon"
+      "letterBody": "hello mooon-01",
+      "letterState": "LETTER_READ"
     }
   ],
   "nextPageStart": "3"
