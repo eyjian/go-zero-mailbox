@@ -46,11 +46,11 @@ done
 * **标记为已读：**
 
 ```
-grpcurl -plaintext -d '{"recipient": "mooon", "letters_id_list": [1,2]}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/mark_messages_as_read
+grpcurl -plaintext -d '{"recipient": "mooon", "letters_id_list": ["1","2"]}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/mark_messages_as_read
 ```
 
 * **删除信件：**
 
 ```
-grpcurl -plaintext -d '{"recipient": "mooon", "letters_id_list": [1,2]}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/delete_messages
+grpcurl -plaintext -d '{"recipient": "mooon", "letters_id_list": ["2","3"]}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/delete_messages
 ```
