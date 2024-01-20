@@ -1,6 +1,12 @@
 Name: mooonmailbox.rpc
 ListenOn: 0.0.0.0:8080
+
+Log:
+  Level: error
+  Mode: console
+
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: mooonmailbox.rpc
+

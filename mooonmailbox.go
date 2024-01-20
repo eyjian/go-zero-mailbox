@@ -4,6 +4,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"mooon-mailbox/model"
 	"os"
 
 	"mooon-mailbox/internal/config"
@@ -21,7 +23,10 @@ import (
 var (
 	help       = flag.Bool("h", false, "Display a help message and exit")
 	configFile = flag.String("f", "etc/mooonmailbox.yaml", "Config file")
-	dsn        = flag.String("dsn", "", "MySQL data source name")
+
+	// 格式：
+	// "dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local"
+	dsn = flag.String("dsn", "", "MySQL data source name")
 )
 
 func main() {
@@ -38,6 +43,9 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
+
+	dbConn := sqlx.NewMysql(*dsn)
+	ctx.MailboxModel = model.NewTMooonMailboxModel(dbConn, c.CacheConf)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		mooon_mailbox.RegisterMooonMailboxServer(grpcServer, server.NewMooonMailboxServer(ctx))
