@@ -1,6 +1,8 @@
 -- Written by yijian on 2024/01/20
 -- 创建信箱表 SQL
 
+-- CREATE DATABASE mailboxdb DEFAULT CHARSET=utf8mb3;
+
 DROP TABLE IF EXISTS `t_mooon_mailbox`;
 CREATE TABLE `t_mooon_mailbox` (
     `f_id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增 ID（信件 ID）',
