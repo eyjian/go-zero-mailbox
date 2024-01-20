@@ -56,7 +56,7 @@ message MarkMessagesAsReadResp {
 // 批量删除信件
 message DeleteMessagesReq {
   string recipient = 1; // 收件人
-  repeated string letters_id_list = 2; // 信件 ID 列表
+  repeated int64 letters_id_list = 2; // 信件 ID 列表
 }
 
 message DeleteMessagesResp {
