@@ -35,10 +35,12 @@ func listMessages(l *ListMessagesLogic, in *mooonmailbox.ListMessagesReq) (*mooo
 			"FROM t_mooon_mailbox "+
 			"WHERE "+
 			"f_recipient='%s' AND "+
+			"f_state=%d AND "+
 			"f_id<%d "+
 			"ORDER BY f_id DESC "+
 			"LIMIT %d",
 		in.Recipient,
+		int(in.ListAction),
 		pageStart,
 		in.PageSize)
 	err := l.svcCtx.CachedConn.QueryRowsNoCacheCtx(l.ctx, &letters, sql)
