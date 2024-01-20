@@ -25,6 +25,6 @@ func NewDeleteMessagesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *De
 
 func (l *DeleteMessagesLogic) DeleteMessages(in *mooon_mailbox.DeleteMessagesReq) (*mooon_mailbox.DeleteMessagesResp, error) {
 	// todo: add your logic here and delete this line
-
-	return &mooon_mailbox.DeleteMessagesResp{}, nil
+	return deleteMessages(l, in)
+	//return &mooon_mailbox.DeleteMessagesResp{}, nil
 }
