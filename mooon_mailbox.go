@@ -23,7 +23,7 @@ import (
 
 var (
 	help       = flag.Bool("h", false, "Display a help message and exit")
-	configFile = flag.String("f", "etc/mooonmailbox.yaml", "Config file")
+	configFile = flag.String("f", "etc/mooon_mailbox.yaml", "Config file")
 
 	// 格式：
 	// "dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local"
