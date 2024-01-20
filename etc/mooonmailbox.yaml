@@ -1,5 +1,6 @@
 Name: mooonmailbox.rpc
 ListenOn: 0.0.0.0:2024
+Mode: dev
 
 Log:
   Level: error
