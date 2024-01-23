@@ -14,6 +14,9 @@ Etcd:
   Hosts:
     - 127.0.0.1:2379
   Key: mooonmailbox.rpc
+  CertFile: etcd.cert # 公钥证书（验证身份）
+  CertKeyFile: ectd.certkey # 私钥文件（加密和解密数据）
+  CACertFile: ectd.cacert # 证书颁发机构（Certificate Authority）的证书文件（对公钥证书签名）
 
 CacheConf:
   - Host: 127.0.0.1
