@@ -16,7 +16,7 @@ done
 * **检索信件：**
 
 ```
-# grpcurl -plaintext -d '{"recipient": "mooon", "start_letter_id": "", "page_size": 10, "list_action": 0}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/list_messages
+# grpcurl -plaintext -d '{"recipient": "mooon", "start_letter_id": "", "page_size": 10, "list_action": 1}' 127.0.0.1:2024 mooon_mailbox.MooonMailbox/list_messages
 {
   "recipient": "mooon",
   "letters": [

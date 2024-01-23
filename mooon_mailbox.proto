@@ -9,8 +9,9 @@ option go_package = "./mooon_mailbox";
 message Letter {
   // 信件状态
   enum LetterState {
-    LETTER_UNREAD = 0; // 未读信件
-    LETTER_READ = 1; // 已读信件
+    LETTER_UNSPECIFIED = 0; // 未定义的
+    LETTER_UNREAD = 1; // 未读信件
+    LETTER_READ = 2; // 已读信件
   }
 
   string letter_id = 1; // 信件 ID
@@ -35,9 +36,10 @@ message DeliverMessageResp {
 message ListMessagesReq {
   // 批量列出信件动作
   enum ListAction {
-    LA_ALL = 0; // 所有信件
-    LA_ONLY_UNREAD = 1; // 仅未读信件
-    LA_ONLY_READ = 2; // 仅已读信件
+    LA_UNSPECIFIED = 0; // 未定义的
+    LA_ALL = 1; // 所有信件
+    LA_ONLY_UNREAD = 2; // 仅未读信件
+    LA_ONLY_READ = 3; // 仅已读信件
   }
 
   string recipient = 1; // 收件人
