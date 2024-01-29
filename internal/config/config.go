@@ -7,5 +7,8 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	CacheConf cache.CacheConf
+	Cache cache.CacheConf
+	DB    struct {
+		DSN string
+	}
 }

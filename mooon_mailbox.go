@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"mooon-mailbox/model"
@@ -27,6 +28,7 @@ var (
 
 	// 格式：
 	// "dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local"
+	// 优先级高于配置中的 DSN
 	dsn = flag.String("dsn", "", "MySQL data source name, example: --dsn='dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local'")
 )
 
@@ -41,13 +43,22 @@ func main() {
 		os.Exit(1)
 	}
 
+	var dbConn sqlx.SqlConn
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 
-	dbConn := sqlx.NewMysql(*dsn)
-	ctx.MailboxModel = model.NewTMooonMailboxModel(dbConn, c.CacheConf)
-	ctx.CachedConn = sqlc.NewConn(dbConn, c.CacheConf)
+	if len(*dsn) == 0 && len(c.DB.DSN) == 0 {
+		logx.Error("Both parameter[--dsn] and config[DB.DSN] are not set\n")
+		os.Exit(1)
+	}
+	if len(*dsn) > 0 {
+		dbConn = sqlx.NewMysql(*dsn)
+	} else {
+		dbConn = sqlx.NewMysql(c.DB.DSN)
+	}
+	ctx.MailboxModel = model.NewTMooonMailboxModel(dbConn, c.Cache)
+	ctx.CachedConn = sqlc.NewConn(dbConn, c.Cache)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		mooon_mailbox.RegisterMooonMailboxServer(grpcServer, server.NewMooonMailboxServer(ctx))
@@ -69,14 +80,8 @@ func usage() {
 func checkParams() bool {
 	for {
 		// configFile
-		if *configFile == "" {
+		if len(*configFile) == 0 {
 			fmt.Println("Parameter[-f] is not set")
-			break
-		}
-
-		// dsn
-		if *dsn == "" {
-			fmt.Println("Parameter[-dsn] is not set")
 			break
 		}
 

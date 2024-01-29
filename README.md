@@ -10,7 +10,7 @@
 ./mooon_mailbox_service --dsn='dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb3&parseTime=True&loc=Local'
 ```
 
-配置文件参考 etc 目录下的 mooon_mailbox.yaml 文件。
+配置文件参考 etc 目录下的 mooon_mailbox.yaml 文件。其中 DB 数据源即可参数指定，也可配置文件指定，但参数优先。
 
 # 如何测试？
 
