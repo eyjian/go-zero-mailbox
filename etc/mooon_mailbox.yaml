@@ -19,7 +19,7 @@ Etcd:
   CACertFile: ectd.cacert # 证书颁发机构（Certificate Authority）的证书文件（对公钥证书签名）
 
 #DB:
-  # DSN: dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  # DSN: dbuser:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai&maxAllowedPacket=16777216
 
 Cache:
   - Host: 127.0.0.1
